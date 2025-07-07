@@ -1,0 +1,10 @@
+{
+  "name": "Poe2ScoutPricer",
+  "displayName": "Poe2Scout Pricer",
+  "description": "Real-time item pricing for Path of Exile 2 using Poe2Scout API",
+  "author": "Poe2ScoutPricer Team", 
+  "version": "1.0.0",
+  "assemblyName": "Poe2ScoutPricer.dll",
+  "mainClass": "Poe2ScoutPricer.Poe2ScoutPricer",
+  "enabledByDefault": true
+}

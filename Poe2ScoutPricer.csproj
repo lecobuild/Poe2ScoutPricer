@@ -1,0 +1,83 @@
+<!-- Poe2ScoutPricer.csproj -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Poe2ScoutPricer</AssemblyName>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>embedded</DebugType>
+    <PathMap>$(MSBuildProjectDirectory)=$(MSBuildProjectName)</PathMap>
+    <EmbedAllSources>true</EmbedAllSources>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <WarningsAsErrors />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>CS8618;CS8601;CS8602;CS8603;CS8604</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyTitle>Poe2Scout Pricer</AssemblyTitle>
+    <AssemblyDescription>ExileCore2 plugin for Path of Exile 2 item pricing using Poe2Scout API</AssemblyDescription>
+    <AssemblyCompany>Poe2ScoutPricer Team</AssemblyCompany>
+    <AssemblyProduct>Poe2ScoutPricer</AssemblyProduct>
+    <AssemblyCopyright>Copyright © 2025</AssemblyCopyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="ExileCore2">
+      <HintPath>$(exileCore2Package)\ExileCore2.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ImGui.NET" Version="1.90.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Compile all .cs files in subdirectories -->
+  <ItemGroup>
+    <Compile Include="**/*.cs" Exclude="bin/**;obj/**" />
+  </ItemGroup>
+
+  <!-- Post-build event to copy to plugins directory for debug -->
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+    <PropertyGroup>
+      <PluginsDir>$(MSBuildProjectDirectory)\..\..\..\Plugins\Compiled\$(AssemblyName)</PluginsDir>
+    </PropertyGroup>
+    <ItemGroup>
+      <OutputFiles Include="$(OutDir)**\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(PluginsDir)" />
+    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(PluginsDir)\%(RecursiveDir)" />
+    <Message Text="Plugin copied to: $(PluginsDir)" Importance="high" />
+  </Target>
+
+  <!-- Create release package -->
+  <Target Name="CreateReleasePackage" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <ReleaseDir>$(MSBuildProjectDirectory)\Release</ReleaseDir>
+      <PackageName>Poe2ScoutPricer-v$(AssemblyVersion)</PackageName>
+    </PropertyGroup>
+    <ItemGroup>
+      <ReleaseFiles Include="$(OutDir)$(AssemblyName).dll" />
+      <ReleaseFiles Include="$(OutDir)plugin.json" />
+      <ReleaseFiles Include="README.md" />
+    </ItemGroup>
+    <MakeDir Directories="$(ReleaseDir)" />
+    <Copy SourceFiles="@(ReleaseFiles)" DestinationFolder="$(ReleaseDir)" />
+    <Message Text="Release package created at: $(ReleaseDir)" Importance="high" />
+  </Target>
+</Project>
