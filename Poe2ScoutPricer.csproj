@@ -1,4 +1,3 @@
-<!-- Poe2ScoutPricer.csproj -->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -45,11 +44,6 @@
     <None Include="plugin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <!-- Compile all .cs files in subdirectories -->
-  <ItemGroup>
-    <Compile Include="**/*.cs" Exclude="bin/**;obj/**" />
   </ItemGroup>
 
   <!-- Post-build event to copy to plugins directory for debug -->
